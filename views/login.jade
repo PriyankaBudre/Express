@@ -1,0 +1,33 @@
+doctype html
+html
+  head
+    title log in
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=2.0')
+    //
+    Bootstrap CSS 
+
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css')
+    script(type='text/javascript', src='http://code.jquery.com/jquery-1.11.0.min.js')
+    script(type='text/javascript').
+    
+        $(document).ready(function() {
+
+            console.log("Document ready");
+            $("#login").click(function(){
+                $.post('/users');
+        });
+        });
+
+body
+  form
+    div
+        label Username:
+        input
+    div
+        label Password:
+        input#passwd
+    div
+        Button#login Log In
+

@@ -1,0 +1,120 @@
+doctype html
+html
+  head
+      title Give Answers
+      meta(charset='utf-8')
+      meta(name='viewport', content='width=device-width, initial-scale=2.0')
+      //
+        Bootstrap CSS 
+
+      link(rel='stylesheet', href='/stylesheets/style.css')
+      link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css')
+      script(type='text/javascript', src='http://code.jquery.com/jquery-1.11.0.min.js')
+      script(type='text/javascript').
+        
+        $(document).ready(function() {
+
+          console.log("Document ready");
+      
+          $.get('/getQwithoutA', function(data){
+            for (iDocument = 0; iDocument < data.length; iDocument++) {     //Get all unanswrered questions on Give Answers page
+              var div = document.createElement("div");
+              div.id = "div" + iDocument;
+              div.style = "margin-bottom: 10px;background-color: beige";
+              //For Question
+              var tableQ = document.createElement("table");
+              var thead = document.createElement("thead");
+              thead.innerHTML = "Asked by:" +data[iDocument].askedby;
+              var tr = document.createElement("tr");
+              tr.innerHTML ="Question:" + data[iDocument].question;
+              var button = document.createElement("button");
+              button.innerHTML = "Answer";
+              button.style = "margin-bottom: 1px;width: 100px;height:2em;background: white";
+              button.id = "btnGiveAns" + iDocument;
+              thead.appendChild(tr);
+              tableQ.appendChild(thead);
+              tableQ.appendChild(button);
+              div.appendChild(tableQ);
+              document.getElementById('MyAs').appendChild(div);
+              var arrDBval = { 
+                iDocument: iDocument,
+                data: data[iDocument],
+                
+              };
+
+              $("#btnGiveAns" + iDocument).click(arrDBval,function() {     //Click on Anwer button to give answer
+                $("#btnGiveAns" + this.arrDBval.iDocument).hide();
+                
+                var inputAns = document.createElement("input");
+                var btnSubmitA = document.createElement("button");
+                var btnCancelA = document.createElement("button");
+
+                inputAns.id = "inputAns" + this.arrDBval.iDocument;
+                inputAns.style = "width: 800px;height:2em;background: white";
+                
+
+                btnSubmitA.id = "btnSubmit" + this.arrDBval.iDocument;
+                btnSubmitA.style = "width: 100px;height:2em;background: white";
+                btnSubmitA.innerHTML = "Submit";
+
+                btnCancelA.id = "btnCancel" + this.arrDBval.iDocument;
+                btnCancelA.style = "width: 100px;height:2em;background: white";
+                btnCancelA.innerHTML = "Cancel";
+
+                document.getElementById('div' + this.arrDBval.iDocument).appendChild(inputAns);
+                document.getElementById('div' + this.arrDBval.iDocument).appendChild(btnSubmitA);
+                document.getElementById('div' + this.arrDBval.iDocument).appendChild(btnCancelA);
+                var thisDoc = this.arrDBval.iDocument;
+                var thisData = this.arrDBval.data;
+
+                $("#btnCancel" + this.arrDBval.iDocument).click(thisDoc,function(){      //Click on Cancel Button
+                  $("#btnGiveAns" + thisDoc).show();
+                  $("#btnSubmit" + thisDoc).remove();
+                  $("#btnCancel" + thisDoc).remove();
+                  $("#inputAns" + thisDoc).remove();
+                })
+
+                $("#btnSubmit" + this.arrDBval.iDocument).click(thisData,function(){      //Click on Submit Button
+                  if ($("#inputAns" + thisDoc).val().trim() == ''){
+                    alert("you did not write the answer");
+                  }
+                  else{
+                    var AnsVal;
+                    
+                    var date = new Date();
+                    var year = date.getFullYear();
+                    var month = (1 + date.getMonth()).toString();
+                    month = month.length > 1 ? month : '0' + month;
+                    var day = date.getDate().toString();
+                    day = day.length > 1 ? day : '0' + day;
+                    var tTime =  month + '/' + day + '/' + year;
+
+                    var user = "dummy";
+                    AnsVal = $('#inputAns' + thisDoc).val();
+                    var arrAnsDetails = {
+                      AnsVal : AnsVal,
+                      user : user,
+                      tTime: tTime,
+                      idDoc: thisData._id,
+                      question: thisData.question
+                    }
+
+                    $.get('/postAns',arrAnsDetails);
+
+                    $("#btnGiveAns" + thisDoc).show();
+                    $("#btnSubmit" + thisDoc).remove();
+                    $("#btnCancel" + thisDoc).remove();
+                    $("#inputAns" + thisDoc).remove();
+
+                  }
+                })
+              }.bind({arrDBval: arrDBval}));
+            }
+          }); 
+
+        });
+    body
+      h1#results
+      div(style="margin-bottom: 2px; margin-top: 2px;margin-left: 100px")
+        a(href='/') HOME
+      div#MyAs(style="margin-bottom: 10px;margin-left: 300px;border = grey;width: 1000px")

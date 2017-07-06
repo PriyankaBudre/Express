@@ -1,0 +1,92 @@
+doctype html
+html
+  head
+      title Ask me about Ginger
+      meta(charset='utf-8')
+      meta(name='viewport', content='width=device-width, initial-scale=2.0')
+      //
+        Bootstrap CSS 
+
+      link(rel='stylesheet', href='/stylesheets/style.css')
+      link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css')
+      script(type='text/javascript', src='http://code.jquery.com/jquery-1.11.0.min.js')
+      script(type='text/javascript').
+        
+        $(document).ready(function() {
+
+          console.log("Document ready");
+          
+          $.get('/getQ', function(data){                  //get method to call all the anserwed questions on the home page
+            for (iDocument = 0; iDocument < data.length; iDocument++) {
+              var div = document.createElement("div");
+              div.style = "margin-bottom: 10px;background-color: beige";
+              //For Question
+              var tableQ = document.createElement("table");
+              var thead = document.createElement("thead");
+              thead.innerHTML = "Asked by:" +data[iDocument].askedby;
+              var tr = document.createElement("tr");
+              tr.innerHTML ="Question:" + data[iDocument].question;
+              //var img = document.createElement("img");
+              //img.src = "../../../images/comment.png";
+              //tr.appendChild(img);
+              var trT = document.createElement("tr");
+              trT.innerHTML ="Aksed on :" + data[iDocument].askedon;
+              thead.appendChild(trT);
+              thead.appendChild(tr);
+              tableQ.appendChild(thead);
+              //For Answer
+              var tableA = document.createElement("table");
+              var thead = document.createElement("thead");
+              thead.innerHTML = "Answered By:" + data[iDocument].answeredby;
+              var tr = document.createElement("tr");
+              tr.innerHTML ="Answer:" + data[iDocument].answer;
+              var trT = document.createElement("tr");
+
+              trT.innerHTML ="Answered on :" + data[iDocument].answeredon ;
+              thead.appendChild(trT);
+              thead.appendChild(tr);
+              tableA.appendChild(thead);
+              //table.innerHTML = data[iDocument].question;
+              div.appendChild(tableQ);
+              div.appendChild(tableA);
+              document.getElementById('AllAnsQs').appendChild(div);
+            }
+          });
+
+          $("#Q").click(function() {    //Change the name of the Button
+            
+            $("#post").text("post");
+          
+            $("#post").click(function(){ //post the Question
+              if ($("#Q").val().trim() == ''){           //Check Question box should not be empty
+                alert("Question box is empty. Try again");
+              }
+              else{
+                Qval = $("#Q").val(); 
+                $("#Q").val('');
+              }
+              
+              var dat = new Date();
+              var year = dat.getFullYear();
+              var month = (1 + dat.getMonth()).toString();
+              month = month.length > 1 ? month : '0' + month;
+              var day = dat.getDate().toString();
+              day = day.length > 1 ? day : '0' + day;
+              var tTime =  month + '/' + day + '/' + year;
+
+              var user = "dummy";
+              //alert(Qval);   
+                       
+              var parameters = { 
+                search: Qval,
+                user: user,
+                tTime: tTime,
+                };
+                //$.post( '/postQs',parameters,function(parameters){},"json");   //Called get method just to send parameters to the db
+                $.ajax({ url: '/postQs', type: 'POST', data: JSON.stringify(parameters), contentType: 'application/json; charset=utf-8', dataType: 'json'});
+            })
+          });   
+        });
+    body
+      h1#results
+      block content

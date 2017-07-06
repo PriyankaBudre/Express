@@ -1,0 +1,21 @@
+
+extends layout
+block content  
+
+  div(style="margin-top: 20px;margin-left: 300px;border = black;border: thin;width: 900px")
+    input#Q(type="text",style="height: 2em;width: 797px;background: white") 
+    button#post(style="width: 100px;height:2em;background: white") Ask me
+    
+  div(style="margin-top: 2px;margin-left: 1300px;margin-bottom: 10px;background-color: white;width: 100px")
+    a#MyQs(href="/MyQs") My Qs
+  
+  div(style="margin-top: 2px;margin-left: 1300px;margin-bottom: 10px;background-color: white;width: 100px")
+    a#MyAs(href="/GiveAnswers") Give Answer
+  
+  div#AllAnsQs(style="margin-bottom: 10px;margin-left: 300px;border = grey;width: 900px")
+
+  div(style="margin-bottom: 2px; margin-top: 2px")
+    button#comment1(style="width: 100px;height:30px") comment
+      img(src='../../../images/comment.png',style='height: 15px;width: 15px')
+    button#like(style="width: 100px;height:30px") Like
+      img(src='../../../images/like.png',style="height: 15px;width: 15px")

@@ -1,0 +1,60 @@
+doctype html
+html
+  head
+      title My Questions
+      meta(charset='utf-8')
+      meta(name='viewport', content='width=device-width, initial-scale=2.0')
+      //
+        Bootstrap CSS 
+
+      link(rel='stylesheet', href='/stylesheets/style.css')
+      link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css')
+      script(type='text/javascript', src='http://code.jquery.com/jquery-1.11.0.min.js')
+      script(type='text/javascript').
+        
+        $(document).ready(function() {
+
+          console.log("Document ready");
+      
+          $.get('/getMyQs', function(data){         //get method to get My questions only. user specific
+            for (iDocument = 0; iDocument < data.length; iDocument++) {
+              var div = document.createElement("div");
+              div.style = "margin-bottom: 10px;background-color: beige";
+              //For Question
+              var tableQ = document.createElement("table");
+              var thead = document.createElement("thead");
+              thead.innerHTML = "Asked by:" +data[iDocument].askedby;
+              var tr = document.createElement("tr");
+              tr.innerHTML ="Question:" + data[iDocument].question;
+              //var img = document.createElement("img");
+              //img.src = "../../../images/comment.png";
+              //tr.appendChild(img);
+              var trT = document.createElement("tr");
+              trT.innerHTML ="Aksed on :" + data[iDocument].askedon;
+              thead.appendChild(trT);
+              thead.appendChild(tr);
+              tableQ.appendChild(thead);
+              //For Answer
+              var tableA = document.createElement("table");
+              var thead = document.createElement("thead");
+              thead.innerHTML = "Answered By:" + data[iDocument].answeredby;
+              var tr = document.createElement("tr");
+              tr.innerHTML ="Answer:" + data[iDocument].answer;
+              var trT = document.createElement("tr");
+
+              trT.innerHTML ="Answered on :" + data[iDocument].answeredon ;
+              thead.appendChild(trT);
+              thead.appendChild(tr);
+              tableA.appendChild(thead);
+              //table.innerHTML = data[iDocument].question;
+              div.appendChild(tableQ);
+              div.appendChild(tableA);
+              document.getElementById('MyQs').appendChild(div);
+            }
+          });   
+        });
+    body
+      h1#results
+      div(style="margin-bottom: 2px; margin-top: 2px;margin-left: 100px")
+        a(href='/') HOME
+      div#MyQs(style="margin-bottom: 10px;margin-left: 300px;border = grey;width: 900px")

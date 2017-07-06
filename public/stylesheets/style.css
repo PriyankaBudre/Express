@@ -1,0 +1,38 @@
+body {
+  
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: lightgray;
+  
+}
+p
+{
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+a {
+  color: blue;
+  
+}
+
+button {
+  color:blue;
+  font: 15px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+input
+ {
+
+  position:relative;
+  max-width: 2000px;
+  margin-top:1px;
+ }
+
+ img
+ {
+  width:19px; 
+  height:19px; 
+  position: relative;
+  padding-top: 4%; 
+ }
+
+
+
