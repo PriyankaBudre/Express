@@ -7,6 +7,9 @@ var bodyParser = require('body-parser');
 //For log in
 var passport = require('passport');
 var LocalStrategy = require('passport-strategy').Strategy;
+//for Config
+var config = require('config');
+var dbURI = config.get('Mongo.URI');
 
 //For routes
 var index = require('./routes/index');
@@ -48,13 +51,9 @@ app.post('/postQs', function(req, res){           //update values in db
   var askedon = req.body.tTime;
   console.log(question);
   
-  
-  //res.setHeader('Content-Type', 'application/json');
-  //res.send(JSON.stringify({ a: 1 }));
-  
   var MongoClient = require('mongodb').MongoClient;
     // Connect to the db
-    MongoClient.connect("mongodb://localhost:27017/QueAns", function (err, db) {
+    MongoClient.connect(dbURI, function (err, db) {
         db.collection('QAcollection', function (err, collection) {
             collection.insertOne({
                 askedby: askedby, 
@@ -81,11 +80,10 @@ app.post('/postQs', function(req, res){           //update values in db
     res.send();
 });
 
-
 app.get('/getQ', function(req, res){                // for main page. Questions with answers
     var MongoClient = require('mongodb').MongoClient;
     // Connect to the db
-    MongoClient.connect("mongodb://localhost:27017/QueAns", function (err, db) {
+    MongoClient.connect(dbURI, function (err, db) {
         
         db.collection('QAcollection', function (err, collection) {
             
@@ -100,7 +98,7 @@ app.get('/getQ', function(req, res){                // for main page. Questions 
 app.get('/getMyQs', function(req, res){     // for MyQs page
     var MongoClient = require('mongodb').MongoClient;
     // Connect to the db
-    MongoClient.connect("mongodb://localhost:27017/QueAns", function (err, db) {
+    MongoClient.connect(dbURI, function (err, db) {
         
         db.collection('QAcollection', function (err, collection) {
             
@@ -115,7 +113,7 @@ app.get('/getMyQs', function(req, res){     // for MyQs page
 app.get('/getQwithoutA', function(req, res){     // only questions for Give Answer page
     var MongoClient = require('mongodb').MongoClient;
     // Connect to the db
-    MongoClient.connect("mongodb://localhost:27017/QueAns", function (err, db) {
+    MongoClient.connect(dbURI, function (err, db) {
         
         db.collection('QAcollection', function (err, collection) {
             
@@ -132,23 +130,22 @@ app.get('/postAns', function(req, res){     // post answers from Give Answer pag
    var tTime = req.query.tTime;
    var user = req.query.user;
    var idDoc = req.query.idDoc;
-   //console.log(idDoc);
-   //console.log(tTime);
+   
    var MongoClient = require('mongodb').MongoClient;
     // Connect to the db
-    MongoClient.connect("mongodb://localhost:27017/QueAns", function (err, db) {
+    MongoClient.connect(dbURI, function (err, db) {
         
         db.collection('QAcollection', function (err, collection) {
-            //console.log(idDoc);
+            
             collection.updateMany(
                 { question : req.query.question },
                 { $set: { "answer" : AnsVal } }
             );
-            collection.updateOne(
+            collection.updateMany(
                 { question : req.query.question },
                 { $set: { "answeredby" : user } }
             );
-            collection.updateOne(
+            collection.updateMany(
                 { question : req.query.question },
                 { $set: { "answeredon" : tTime } }
             );
