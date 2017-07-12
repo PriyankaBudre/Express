@@ -1,6 +1,5 @@
 {
-  // Customer module configs 
-  "Mongo": {
-      "URI": "mongodb://localhost:27017/QueAns"
+    "Mongo": {
+      "URI": "mongodb://mongodb:27017/QueAns"
   }
 }

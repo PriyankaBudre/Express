@@ -5,8 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 //For log in
-var passport = require('passport');
-var LocalStrategy = require('passport-strategy').Strategy;
+//var passport = require('passport');
+//var LocalStrategy = require('passport-strategy').Strategy;
 //for Config
 var config = require('config');
 var dbURI = config.get('Mongo.URI');
@@ -38,11 +38,11 @@ app.use('/MyQs', MyQs);
 app.use('/GiveAnswers', GiveAnswers);
 
 //for log in
-app.post('/users',
+/*app.post('/users',
   passport.authenticate('local', { successRedirect: '/',
                                    failureRedirect: '/',
                                    failureFlash: true })
-);
+);*/
 
 app.post('/postQs', function(req, res){           //update values in db
  // input value from search
@@ -86,7 +86,7 @@ app.get('/getQ', function(req, res){                // for main page. Questions 
     MongoClient.connect(dbURI, function (err, db) {
         
         db.collection('QAcollection', function (err, collection) {
-            
+            if(err) throw err;
             collection.find({answer:{$ne:null}}).sort( { _id: -1 } ).toArray(function(err, items) {
                 if(err) throw err;  
                 res.send(items);
