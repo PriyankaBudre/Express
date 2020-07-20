@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 FROM node:boron
 
 # Create app directory
