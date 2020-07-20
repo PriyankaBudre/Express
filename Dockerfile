@@ -28,5 +28,4 @@ RUN npm install
 COPY . /usr/src/app
 
 EXPOSE 3000
->>>>>>> dc3120d82bbaa74066f76f53cac50941234a6192
 CMD [ "node", "./bin/www" ]
